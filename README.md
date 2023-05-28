@@ -96,7 +96,7 @@ O cozinheiro Remy preparou uma refeição para si mesmo e, enquanto almoçava, d
 
 O RataTube possui um feed de n vídeos, cada um representado por uma estrutura de vídeos, contendo informações sobre sua duração em segundos e o nível de entretenimento. O feed é inicialmente aberto no primeiro vídeo e Remy pode pular para o próximo vídeo em 1 segundo (caso exista). Ele pode pular vídeos quantas vezes desejar, inclusive não pular nenhum.
 
-Sua tarefa é auxiliar Remy a escolher um vídeo que ele possa abrir e assistir dentro do tempo disponível, t segundos. Se houver vários vídeos que se encaixem nessa condição, ele deseja escolher o vídeo com o maior nível de entretenimento. Retorne qualquer vídeo apropriado ou exiba um erro caso não haja um vídeo adequado dentro do tempo disponível. E, caso não seja possível assistir nenhum vídeo, returne um erro.
+Sua tarefa é auxiliar Remy a escolher um vídeo que ele possa abrir e assistir dentro do tempo disponível, t segundos. Se houver vários vídeos que se encaixem nessa condição, ele deseja escolher o vídeo com o maior nível de entretenimento. Retorne qualquer vídeo apropriado ou exiba um erro caso não haja um vídeo adequado dentro do tempo disponível. E, caso não seja possível assistir nenhum vídeo, retorne um erro.
 
 # Exemplo de entrada:
 
