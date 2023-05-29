@@ -4,9 +4,9 @@ import "fmt"
 
 func canBuyEnoughFood(numberDogs, numberCats int, stock map[string]int) bool {
 	totalNumberAnimals := numberDogs + numberCats
-	amountFoodNeeded := stock["dog"] + stock["cat"] + stock["universal"]
+	amountFood := stock["dog"] + stock["cat"] + stock["universal"]
 
-	if amountFoodNeeded < totalNumberAnimals {
+	if amountFood < totalNumberAnimals {
 		return false
 	}
 
