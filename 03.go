@@ -20,7 +20,7 @@ func findBestVideo(t int, videos []Video) (Video, error) {
 	}
 
 	if bestVideo.ID == 0 {
-		return Video{}, fmt.Errorf("não há um vídeo adequado dentro do tempo disponível")
+		return Video{}, fmt.Errorf("error")
 	}
 
 	return bestVideo, nil
@@ -53,7 +53,7 @@ func main() {
 
 	bestVideo, err := findBestVideo(t, videos)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Print(err)
 	} else {
 		fmt.Printf("Video{\n\tID: %d,\n\tDuration: %d,\n\tEntertainment: %d,\n}", bestVideo.ID, bestVideo.Duration, bestVideo.Entertainment)
 	}

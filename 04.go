@@ -2,34 +2,55 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"sort"
 )
 
-type Tshirt struct {
-	Price int
+type Shirt struct {
 	Size  string
+	Price float64
 }
 
-func averageHighestLowestPrice(tshirts []Tshirt) int {
-	var bigger Tshirt
-	var smaller Tshirt
-
-	for _, tshirt := range tshirts {
-		if strings.HasSuffix(tshirt.Size, "L") && strings.Count(tshirt.Size, "")-1 > strings.Count(bigger.Size, "")-1 {
-			tshirt.Price = bigger.Price
-		}
-	}
-	for _, tshirt := range tshirts {
-		if strings.HasSuffix(tshirt.Size, "S") && strings.Count(tshirt.Size, "")-1 > strings.Count(bigger.Size, "")-1 {
-			tshirt.Price = smaller.Price
-		}
+func biggerSize(a, b string) bool {
+	if a == b {
+		return false
 	}
 
-	return (bigger.Price + smaller.Price) / 2
+	numericalSize := map[string]int{
+		"S":    1,
+		"XS":   2,
+		"M":    3,
+		"XL":   4,
+		"XXL":  5,
+		"XXXL": 6,
+	}
+
+	_, aValid := numericalSize[a]
+	_, bValid := numericalSize[b]
+	if !aValid || !bValid {
+		return false
+	}
+
+	return numericalSize[a] > numericalSize[b]
+}
+
+func calculateAverage(tshirts []Shirt) (float64, error) {
+	if len(tshirts) == 0 {
+		return 0, fmt.Errorf("error")
+	}
+
+	sort.SliceStable(tshirts, func(i, j int) bool {
+		return biggerSize(tshirts[i].Size, tshirts[j].Size)
+	})
+
+	highestPrice := tshirts[0].Price
+	lowestPrice := tshirts[len(tshirts)-1].Price
+
+	average := (highestPrice + lowestPrice) / 2
+	return average, nil
 }
 
 func main() {
-	tshirts := []Tshirt{
+	tshirts := []Shirt{
 		{
 			Size:  "M",
 			Price: 10,
@@ -48,6 +69,11 @@ func main() {
 		},
 	}
 
-	calculating := averageHighestLowestPrice(tshirts)
-	fmt.Print(calculating)
+	average, err := calculateAverage(tshirts)
+	if err != nil {
+		fmt.Print(err)
+		return
+	}
+
+	fmt.Print(average)
 }
