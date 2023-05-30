@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"sort"
+	"math"
+	"strings"
 )
 
 type Shirt struct {
@@ -10,47 +12,48 @@ type Shirt struct {
 	Price float64
 }
 
-func biggerSize(a, b string) bool {
-	if a == b {
-		return false
+func average(shirts []Shirt) float64 {
+	var sum float64
+
+	for _, shirt := range shirts {
+		sum += shirt.Price
 	}
 
-	numericalSize := map[string]int{
-		"S":    1,
-		"XS":   2,
-		"M":    3,
-		"XL":   4,
-		"XXL":  5,
-		"XXXL": 6,
-	}
-
-	_, aValid := numericalSize[a]
-	_, bValid := numericalSize[b]
-	if !aValid || !bValid {
-		return false
-	}
-
-	return numericalSize[a] > numericalSize[b]
+	return sum / float64(len(shirts))
 }
-
-func calculateAverage(tshirts []Shirt) (float64, error) {
-	if len(tshirts) == 0 {
-		return 0, fmt.Errorf("error")
+func CalculateAveragePrice(shirts []Shirt) (max, min float64, err error) {
+	if len(shirts) == 0 {
+		return 0, 0, errors.New("erro")
 	}
 
-	sort.SliceStable(tshirts, func(i, j int) bool {
-		return biggerSize(tshirts[i].Size, tshirts[j].Size)
-	})
+	shirtsMap := make(map[int][]Shirt)
 
-	highestPrice := tshirts[0].Price
-	lowestPrice := tshirts[len(tshirts)-1].Price
+	var maxSize = math.MinInt
+	var minSize = math.MaxInt
 
-	average := (highestPrice + lowestPrice) / 2
-	return average, nil
+	for _, shirt := range shirts {
+		var result int
+		switch {
+		case strings.Contains(shirt.Size, "S"):
+			result = -strings.Count(shirt.Size, "X") - 1
+		case strings.Contains(shirt.Size, "L"):
+			result = strings.Count(shirt.Size, "X") + 1
+
+		}
+		shirtsMap[result] = append(shirtsMap[result], shirt)
+		if result > maxSize {
+			maxSize = result
+		}
+		if result < minSize {
+			minSize = result
+		}
+	}
+
+	return average(shirtsMap[maxSize]), average(shirtsMap[minSize]), nil
 }
 
 func main() {
-	tshirts := []Shirt{
+	shirts := []Shirt{
 		{
 			Size:  "M",
 			Price: 10,
@@ -69,11 +72,10 @@ func main() {
 		},
 	}
 
-	average, err := calculateAverage(tshirts)
+	min, max, err := CalculateAveragePrice(shirts)
 	if err != nil {
-		fmt.Print(err)
-		return
+		fmt.Println(err)
+	} else {
+		fmt.Println(min, max)
 	}
-
-	fmt.Print(average)
 }
